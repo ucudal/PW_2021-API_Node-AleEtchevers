@@ -2,16 +2,12 @@ var express = require('express');
 var cors = require('cors');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
-
 var app = express();
+var jsonParser = bodyParser.json();
 
 app.use(cookieParser());
-app.use(cors({
-    origin: '*'
-}));
-app.use(express.urlencoded({
-  extended: true
-}));
+app.use(cors({ origin: '*'}));
+app.use(express.urlencoded({ extended: true }));
 
 var experiencia_laboral = {
   "experiencia-laboral": [
@@ -43,17 +39,21 @@ app.get('/experiencia-laboral', function(req, res) {
   res.send(experiencia_laboral);
 });
 
-var jsonParser = bodyParser.json();
-
 app.post('/enviar-formulario', jsonParser, function(req, res) {
+  const nombreContacto = req.body.nombreContacto;
+  if (!nombreContacto) {
+    return res.status(400).send("Falta el nombre de contacto");
+  }
+  res.cookie("PW_2021-CV_Contacto", nombreContacto);
+  res.send(`Gracias por tu contacto, ${nombreContacto}. Me comunicaré pronto!`);
 });
 
 app.post("/*", jsonParser, function(req, res) {
   res.status(404).send("404 - No fue encontrado");
 });
 
-app.listen(process.env.PORT || 3000, (a) => {
-  console.log("Servidor disponible en http://localhost:3000")
+app.listen(process.env.PORT || 3001, (a) => {
+  console.log("Servidor disponible en http://localhost:3001")
 });
  
 module.exports = app;
