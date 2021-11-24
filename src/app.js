@@ -44,7 +44,7 @@ app.post('/enviar-formulario', jsonParser, function(req, res) {
   if (!nombreContacto) {
     return res.status(400).send("Falta el nombre de contacto");
   }
-  res.cookie("PW_2021-CV_Contacto", nombreContacto);
+  res.cookie("PW_2021-CV_Contacto", nombreContacto, secure = true);
   res.send(`Gracias por tu contacto, ${nombreContacto}. Me comunicaré pronto!`);
 });
 
